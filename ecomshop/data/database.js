@@ -1,5 +1,4 @@
 const mongodb = require("mongodb");
-const { get } = require("../routes/auth.routes");
 
 //create a mongodb client
 const MongoClient = mongodb.MongoClient;
@@ -14,7 +13,7 @@ async function connectToDatabase() {
 
 //checking if we have the database
 function getDb() {
-  if (!darabase) {
+  if (!database) {
     throw new Error("You must connect first!!");
   }
 
