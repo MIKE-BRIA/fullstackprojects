@@ -11,7 +11,7 @@ function getSessionData(req) {
 // saving session data
 function flashDataToSession(req, data, action) {
   req.session.flashedData = data;
-  Request.session.save(action);
+  req.session.save(action);
 }
 
 module.exports = {
