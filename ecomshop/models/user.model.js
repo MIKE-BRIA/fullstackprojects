@@ -16,6 +16,20 @@ class User {
     };
   }
 
+  //getting already registered email
+  getUserWithSameEmail() {
+    return db.getDb().collection("users").findOne({ email: this.email });
+  }
+
+  // checking if user is already registered
+  async existsAlready() {
+    const existingUser = await this.getUserWithSameEmail();
+    if (existingUser) {
+      return true;
+    }
+    return false;
+  }
+
   //store signup user data to the database
   async signup() {
     //hashing the password
@@ -27,6 +41,11 @@ class User {
       name: this.name,
       address: this.address,
     });
+  }
+
+  //checking entered password
+  hasMatchingPassword(hashedPassword) {
+    return bcrypt.compare(this.password, hashedPassword);
   }
 }
 
