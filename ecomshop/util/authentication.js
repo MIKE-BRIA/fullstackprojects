@@ -1,8 +1,10 @@
 //authenticating user to login
 
-//creating userseeion
+//creating user session
+//storing Admin session
 function createUserSession(req, user, action) {
   req.session.uid = user._id.toString();
+  req.session.isAdmin = user.isAdmin;
   req.session.save(action); //saving the session
 }
 
