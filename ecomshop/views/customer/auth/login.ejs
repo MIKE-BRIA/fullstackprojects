@@ -8,6 +8,12 @@
     <%- include('../../shared/includes/header') %>
     <main>
         <h1>Login to Your Account</h1>
+        <% if(inputData.errormessage) {%>
+            <section class="alert">
+                <h2>Invalid credentials</h2>
+                <p><%= inputData.errormessage %></p>
+            </section>
+        <% } %>
         <form action="/login" method="POST">
 
             <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
@@ -17,7 +23,8 @@
                 <input 
                 type="email" 
                 id="email" 
-                name="email" 
+                name="email"
+                value="<%= inputData.email %>"
                 required> 
             </p>
             <p>
@@ -26,6 +33,7 @@
                 type="password" 
                 id="password" 
                 name="password" 
+                value="<%= inputData.password %>"
                 required> 
             </p>
             <button class="btn">Login</button>
