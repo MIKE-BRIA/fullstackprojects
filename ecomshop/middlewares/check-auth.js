@@ -1,4 +1,5 @@
 //middleware to check if user is authenticated to login
+// * checks also if user is admin or normal user
 
 function checkAuthStatus(req, res, next) {
   const uid = req.session.uid;
@@ -9,6 +10,7 @@ function checkAuthStatus(req, res, next) {
 
   res.locals.uid = uid;
   res.locals.isAuth = true;
+  res.locals.isAdmin = req.session.isAdmin;
   next();
 }
 
