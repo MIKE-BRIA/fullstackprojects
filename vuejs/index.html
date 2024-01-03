@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@3.0.2"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <h1>hello vue</h1>
+
+    <div id="app">
+      <div v-if="showBooks">
+        <p>{{ title }}, {{ author}}, {{ age }}</p>
+      </div>
+
+      <button @click="changeTitle">Change title</button>
+      <button @click="resetData">Reset</button>
+
+      <button @click="toggleShowBooks">
+        <span v-if="showBooks">Hide Books</span>
+        <span v-else>Show Books</span>
+      </button>
+
+      <br />
+
+      <!-- mouse events-->
+      <div class="box" @mouseover="handleEvent">Mouseover (enter)</div>
+      <div class="box" @mouseleave="handleEvent">Mouseleave</div>
+      <div class="box" @dblclick="handleEvent">Double click</div>
+      <div class="box"></div>
+    </div>
+  </body>
+</html>
