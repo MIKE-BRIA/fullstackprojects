@@ -12,8 +12,21 @@
     <h1>hello vue</h1>
 
     <div id="app">
+      <!--  attribute binding -->
+      <a :href="url">Books store</a>
+
       <div v-if="showBooks">
-        <p>{{ title }}, {{ author}}, {{ age }}</p>
+        <ul>
+          <li
+            v-for="book in filterBooks"
+            :class="{fav: book.isFav}"
+            @click="toggleFav(book)"
+          >
+            <img :src="book.img" :alt="book.title" />
+            <h3>{{book.title}}</h3>
+            <p>{{book.author}}</p>
+          </li>
+        </ul>
       </div>
 
       <button @click="changeTitle">Change title</button>
@@ -27,10 +40,14 @@
       <br />
 
       <!-- mouse events-->
-      <div class="box" @mouseover="handleEvent">Mouseover (enter)</div>
+      <div class="box" @mouseover="handleEvent($event, 5)">
+        Mouseover (enter)
+      </div>
       <div class="box" @mouseleave="handleEvent">Mouseleave</div>
       <div class="box" @dblclick="handleEvent">Double click</div>
-      <div class="box"></div>
+      <div class="box" @mousemove="handlemousemove">
+        position - {{ x }} {{ y }}
+      </div>
     </div>
   </body>
 </html>
