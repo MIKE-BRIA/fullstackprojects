@@ -5,9 +5,35 @@ const app = Vue.createApp({
   data() {
     return {
       showBooks: true,
-      title: "The Final Empire",
-      author: "Joshua Blo",
-      age: 35,
+      url: "http://www.google.com/books",
+      x: 0,
+      y: 0,
+      books: [
+        {
+          title: "name the widow",
+          author: "Michael Smith",
+          img: "assets/1.jpg",
+          isFav: true,
+        },
+        {
+          title: "the way of kings",
+          author: "Brian white",
+          img: "assets/2.jpg",
+          isFav: false,
+        },
+        {
+          title: "home",
+          author: "lewis jedin",
+          img: "assets/3.jpg",
+          isFav: true,
+        },
+        {
+          title: "blue roses",
+          author: "Suzan Smith",
+          img: "assets/4.jpg",
+          isFav: false,
+        },
+      ],
     };
   },
   methods: {
@@ -28,8 +54,24 @@ const app = Vue.createApp({
       console.log("toggleShowBooks called");
       this.showBooks = !this.showBooks;
     },
-    handleEvent(e) {
+    handleEvent(e, data) {
       console.log(e, e.type);
+      if (data) {
+        console.log(data);
+      }
+    },
+    handlemousemove(e) {
+      this.x = e.offsetX;
+      this.y = e.offsetY;
+    },
+    toggleFav(book) {
+      book.isFav = !book.isFav;
+    },
+  },
+
+  computed: {
+    filterBooks() {
+      return this.books.filter((book) => book.isFav);
     },
   },
 });
