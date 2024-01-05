@@ -19,4 +19,8 @@ router.post(
   adminController.createNewProduct
 ); //? extraction of uploaded image
 
+router.get("/products/:id", adminController.getUpateProduct);
+
+router.post("products/:id", adminController.updateProduct);
+
 module.exports = router;
