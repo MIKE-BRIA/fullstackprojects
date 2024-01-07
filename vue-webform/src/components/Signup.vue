@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit="handleSubmit">
+    <form @submit.prevent="handleSubmit">
       <!--email-->
       <label for="">Email</label>
       <input type="email" required v-model="email" />
@@ -27,8 +27,8 @@
         <label class="conditions">ACCEPT TERMS AND CONDITIONS</label>
       </div>
 
-      <div class="button">
-        <submit>Create Account</submit>
+      <div class="submit">
+        <button>Create Account</button>
       </div>
     </form>
   </div>
@@ -57,6 +57,7 @@ export default {
       }
     },
     deleteSkill(Skills) {
+      //delete entered skills
       this.Skills = this.Skills.filter((item) => {
         return Skills !== item;
       });
@@ -67,6 +68,14 @@ export default {
         this.password.length > 5
           ? ""
           : "Password must be atleast six characters long";
+
+      if (!this.passwordError) {
+        console.log("email :", this.email);
+        console.log("password :", this.password);
+        console.log("role :", this.role);
+        console.log("Skills :", this.Skills);
+        console.log("Terms Accepted :", this.terms);
+      }
     },
   },
 };
@@ -126,9 +135,7 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-.button {
-  margin: auto;
-  text-align: center;
+button {
   background: #0b6dff;
   border: 0;
   padding: 10px 20px;
@@ -138,13 +145,13 @@ input[type="checkbox"] {
   max-width: 9rem;
   cursor: pointer;
 }
-submit {
+.submit {
   text-align: center;
 }
 .error {
   color: #ff0062;
   margin-top: 10px;
-  font-size: 10px;
+  font-size: 0.9rem;
   font-weight: bold;
 }
 </style>
