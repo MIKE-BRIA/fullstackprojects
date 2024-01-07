@@ -16,12 +16,18 @@
 <script>
 export default {
   methods: {
-    redirect() {},
+    //redirect by pushing on a new route
+    redirect() {
+      this.$router.push({ name: "home" });
+    },
     //going back through the history
     back() {
       this.$router.go(-1);
     },
-    forward() {},
+    //going forward through the history
+    forward() {
+      this.$router.go(1);
+    },
   },
 };
 </script>
