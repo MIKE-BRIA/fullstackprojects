@@ -16,7 +16,8 @@ class Product {
     }
   }
 
-  //gettting product to display in admin dashboard
+  //?Finding a product by Id
+  //gettting product to display in admin dashboard 
   static async findById(productId) {
     let prodId;
 

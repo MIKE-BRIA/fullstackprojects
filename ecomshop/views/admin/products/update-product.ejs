@@ -1,6 +1,6 @@
 <%-include('../../shared/includes/head', {pageTitle : 'Update product'}) %>
 <link rel="stylesheet" href="/styles/forms.css">
-    
+<script src="/scripts/imagepreview.js" defer></script>
 </head>
 <body>
     <%- include('../../shared/includes/header') %>
@@ -11,7 +11,8 @@
             submitPath: '/admin/products/' + product.id,
             product: product,
             imageRequired: false
-        }) %>
+        }) 
+        %>
           
     </main>
 

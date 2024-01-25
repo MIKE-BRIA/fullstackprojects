@@ -51,7 +51,7 @@ async function createNewProduct(req, res, next) {
 //getting the updated product page
 async function getUpateProduct(req, res, next) {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id);//req.params has been used to get the product through id
     res.render("admin/products/update-product", { product: product });
   } catch (error) {
     next(error);

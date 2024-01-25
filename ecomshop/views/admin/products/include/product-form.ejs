@@ -14,19 +14,20 @@
     />
   </p>
 
-  <p>
-    <label for="image">Image</label>
-    <input
-      type="file"
-      id="image"
-      name="image"
-      accept=".png, .jpg"
-      <%
-      if
-      (imageRequired)
-      {%
-    />required<% } %> >
-  </p>
+  <div id="image-upload-control">
+    <p>
+      <label for="image">Image</label>
+      <input
+        type="file"
+        id="image"
+        name="image"
+        accept=".png, .jpg"
+        <%if(imageRequired){%>required<% } %> 
+      />
+    </p>
+
+    <img src="" alt="select image" />
+  </div>
 
   <p>
     <label for="summary">Summary</label>
@@ -47,8 +48,8 @@
       id="price"
       name="price"
       value="<%= product.price %>"
-      min="0.05"
-      step="0.05"
+      min="0.01"
+      step="0.01"
       required
     />
   </p>

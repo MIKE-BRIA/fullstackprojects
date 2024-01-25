@@ -23,6 +23,7 @@ const productsRoutes = require("./routes/products.routes");
 const baseRoutes = require("./routes/base.routes");
 const adminRoutes = require("./routes/admin.routes");
 
+
 const app = express();
 
 //setting up ejs
@@ -35,6 +36,7 @@ app.use(express.static("public"));
 app.use("/products/assets", express.static("product-data"));
 //for extracting data from request
 app.use(express.urlencoded({ extended: false }));
+
 
 const sessionconfig = createsessionConfig();
 
