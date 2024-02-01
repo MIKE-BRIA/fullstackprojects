@@ -16,13 +16,17 @@ const addCsrfTokenMiddleware = require("./middlewares/csrf-tokens");
 const errorHandlerMiddleware = require("./middlewares/error-handler");
 //authentication middlieware
 const checkAuthStatusMiddleware = require("./middlewares/check-auth");
+//protect routes middleware
+const protectRoutesMiddleware = require("./middlewares/protect-routes");
+//cart middleware
+const cartMiddleware = require("./middlewares/cart");
 
 //importing routes
 const authRoutes = require("./routes/auth.routes");
 const productsRoutes = require("./routes/products.routes");
 const baseRoutes = require("./routes/base.routes");
 const adminRoutes = require("./routes/admin.routes");
-
+const cartRoutes = require("./routes/cart.routes");
 
 const app = express();
 
@@ -36,12 +40,15 @@ app.use(express.static("public"));
 app.use("/products/assets", express.static("product-data"));
 //for extracting data from request
 app.use(express.urlencoded({ extended: false }));
-
+//middleware for extracting data from json response
+app.use(express.json());
 
 const sessionconfig = createsessionConfig();
 
 app.use(expressSession(sessionconfig));
 app.use(csrf());
+
+app.use(cartMiddleware);
 
 app.use(addCsrfTokenMiddleware);
 app.use(checkAuthStatusMiddleware);
@@ -49,6 +56,8 @@ app.use(checkAuthStatusMiddleware);
 app.use(baseRoutes);
 app.use(authRoutes);
 app.use(productsRoutes);
+app.use("/cart", cartRoutes);
+app.use(protectRoutesMiddleware);
 app.use("/admin", adminRoutes);
 
 app.use(errorHandlerMiddleware);

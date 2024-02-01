@@ -2,6 +2,11 @@
 
 const Product = require("../models/product.model");
 
+//get cart
+function getCart(req, res) {
+  res.render("customer/cart/cart");
+}
+
 //adding cartitem
 async function addCartItem(req, res, next) {
   let product;
@@ -23,6 +28,29 @@ async function addCartItem(req, res, next) {
   });
 }
 
+//updating the cart items
+function updateCartItem(req, res, next) {
+  const cart = res.locals.cart;
+
+  const updatedItemData = cart.updateCartItem(
+    req.body.productId,
+    req.body.quantity
+  );
+
+  req.session.cart = cart;
+
+  res.json({
+    message: "Cart updated successfully updated successfully",
+    updatedCartData: {
+      newTotalQuantity: cart.totalQuantity,
+      newTotalPrice: cart.totalPrice,
+      updatedItemPrice: updatedItemData.updatedItemPrice,
+    },
+  });
+}
+
 module.exports = {
   addCartItem: addCartItem,
+  getCart: getCart,
+  updateCartItem: updateCartItem,
 };

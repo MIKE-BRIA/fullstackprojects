@@ -21,6 +21,12 @@ router.post(
 
 router.get("/products/:id", adminController.getUpateProduct);
 
-router.post("products/:id",imageUploadMiddleware, adminController.updateProduct);
+router.post(
+  "/products/:id",
+  imageUploadMiddleware,
+  adminController.updateProduct
+);
+
+router.delete("/products/:id", adminController.deleteProduct);
 
 module.exports = router;

@@ -51,13 +51,14 @@ async function createNewProduct(req, res, next) {
 //getting the updated product page
 async function getUpateProduct(req, res, next) {
   try {
-    const product = await Product.findById(req.params.id);//req.params has been used to get the product through id
+    const product = await Product.findById(req.params.id); //req.params has been used to get the product through id
     res.render("admin/products/update-product", { product: product });
   } catch (error) {
     next(error);
   }
 }
 
+//updating the data on the admin panel
 async function updateProduct(req, res, next) {
   const product = new Product({
     ...req.body,
@@ -79,10 +80,24 @@ async function updateProduct(req, res, next) {
   res.redirect("/admin/products");
 }
 
+//deleting a product from admin panel
+async function deleteProduct(req, res, next) {
+  let product;
+  try {
+    product = await Product.findById(req.params.id);
+    await product.remove();
+  } catch (error) {
+    return next(error);
+  }
+
+  res.json({ message: "Deleted Product!" });
+}
+
 module.exports = {
   getProducts: getProducts,
   getNewProduct: getNewProduct,
   createNewProduct: createNewProduct,
   getUpateProduct: getUpateProduct,
   updateProduct: updateProduct,
+  deleteProduct: deleteProduct,
 };

@@ -17,7 +17,7 @@ class Product {
   }
 
   //?Finding a product by Id
-  //gettting product to display in admin dashboard 
+  //gettting product to display in admin dashboard
   static async findById(productId) {
     let prodId;
 
@@ -88,6 +88,13 @@ class Product {
   async replaceImage(newImage) {
     this.image = newImage;
     this.updateImageData();
+  }
+
+  //Deleting products from the database
+  remove() {
+    //get product id
+    const productId = new mongodb.ObjectId(this.id);
+    return db.getDb().collection("products").deleteOne({ _id: productId });
   }
 }
 
