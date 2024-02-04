@@ -1,15 +1,58 @@
 //* All data about the cart
 
-class cart {
+const Product = require("./product.model");
+
+class Cart {
   constructor(items = [], totalQuantity = 0, totalPrice = 0) {
     this.items = items;
     this.totalQuantity = totalQuantity;
     this.totalPrice = totalPrice;
   }
 
-  //adding items to the cart
+  async updatePrices() {
+    const productIds = this.items.map(function (item) {
+      return item.product.id;
+    });
+
+    const products = await Product.findMultiple(productIds);
+
+    const deletableCartItemProductIds = [];
+
+    for (const cartItem of this.items) {
+      const product = products.find(function (prod) {
+        return prod.id === cartItem.product.id;
+      });
+
+      if (!product) {
+        // product was deleted!
+        // "schedule" for removal from cart
+        deletableCartItemProductIds.push(cartItem.product.id);
+        continue;
+      }
+
+      // product was not deleted
+      // set product data and total price to latest price from database
+      cartItem.product = product;
+      cartItem.totalPrice = cartItem.quantity * cartItem.product.price;
+    }
+
+    if (deletableCartItemProductIds.length > 0) {
+      this.items = this.items.filter(function (item) {
+        return deletableCartItemProductIds.indexOf(item.product.id) < 0;
+      });
+    }
+
+    // re-calculate cart totals
+    this.totalQuantity = 0;
+    this.totalPrice = 0;
+
+    for (const item of this.items) {
+      this.totalQuantity = this.totalQuantity + item.quantity;
+      this.totalPrice = this.totalPrice + item.totalPrice;
+    }
+  }
+
   addItem(product) {
-    //cartitmes
     const cartItem = {
       product: product,
       quantity: 1,
@@ -20,9 +63,8 @@ class cart {
       const item = this.items[i];
       if (item.product.id === product.id) {
         cartItem.quantity = +item.quantity + 1;
-        //upading the total price
         cartItem.totalPrice = item.totalPrice + product.price;
-        this.items[i] = cartItem; //replacing the items with the upated cart item
+        this.items[i] = cartItem;
 
         this.totalQuantity++;
         this.totalPrice += product.price;
@@ -35,7 +77,6 @@ class cart {
     this.totalPrice += product.price;
   }
 
-  //updating items using the update button in cart
   updateItem(productId, newQuantity) {
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
@@ -43,17 +84,14 @@ class cart {
         const cartItem = { ...item };
         const quantityChange = newQuantity - item.quantity;
         cartItem.quantity = newQuantity;
-        //upading the total price
         cartItem.totalPrice = newQuantity * item.product.price;
-        this.items[i] = cartItem; //replacing the items with the upated cart item
+        this.items[i] = cartItem;
 
         this.totalQuantity = this.totalQuantity + quantityChange;
         this.totalPrice += quantityChange * item.product.price;
         return { updatedItemPrice: cartItem.totalPrice };
       } else if (item.product.id === productId && newQuantity <= 0) {
-        //remove the item from the cart
         this.items.splice(i, 1);
-        //update the quantity and price
         this.totalQuantity = this.totalQuantity - item.quantity;
         this.totalPrice -= item.totalPrice;
         return { updatedItemPrice: 0 };
@@ -62,4 +100,4 @@ class cart {
   }
 }
 
-module.exports = cart;
+module.exports = Cart;
