@@ -1,54 +1,41 @@
-//require path package for giving path to viewe folder
 const path = require("path");
 
 const express = require("express");
-const csrf = require("csurf"); //dealing with csrf attack
-const expressSession = require("express-session"); //foe sessions
+const csrf = require("csurf");
+const expressSession = require("express-session");
 
-const createsessionConfig = require("./config/session");
-
-//importing database
+const createSessionConfig = require("./config/session");
 const db = require("./data/database");
-
-//cutom made csrftoken middleware
 const addCsrfTokenMiddleware = require("./middlewares/csrf-tokens");
-//errorhandler middleware
 const errorHandlerMiddleware = require("./middlewares/error-handler");
-//authentication middlieware
 const checkAuthStatusMiddleware = require("./middlewares/check-auth");
-//protect routes middleware
 const protectRoutesMiddleware = require("./middlewares/protect-routes");
-//cart middleware
 const cartMiddleware = require("./middlewares/cart");
-
-//importing routes
+const updateCartPricesMiddleware = require("./middlewares/update-cart-prices");
 const authRoutes = require("./routes/auth.routes");
 const productsRoutes = require("./routes/products.routes");
 const baseRoutes = require("./routes/base.routes");
 const adminRoutes = require("./routes/admin.routes");
 const cartRoutes = require("./routes/cart.routes");
+const ordersRoutes = require("./routes/orders.routes");
 
 const app = express();
 
-//setting up ejs
 app.set("view engine", "ejs");
-//views path
 app.set("views", path.join(__dirname, "views"));
 
-//for css and styling and folders that are served statically
 app.use(express.static("public"));
 app.use("/products/assets", express.static("product-data"));
-//for extracting data from request
 app.use(express.urlencoded({ extended: false }));
-//middleware for extracting data from json response
 app.use(express.json());
 
-const sessionconfig = createsessionConfig();
+const sessionConfig = createSessionConfig();
 
-app.use(expressSession(sessionconfig));
+app.use(expressSession(sessionConfig));
 app.use(csrf());
 
 app.use(cartMiddleware);
+app.use(updateCartPricesMiddleware);
 
 app.use(addCsrfTokenMiddleware);
 app.use(checkAuthStatusMiddleware);
@@ -58,16 +45,16 @@ app.use(authRoutes);
 app.use(productsRoutes);
 app.use("/cart", cartRoutes);
 app.use(protectRoutesMiddleware);
+app.use("/orders", ordersRoutes);
 app.use("/admin", adminRoutes);
 
 app.use(errorHandlerMiddleware);
 
-//checks if we connected to the database
 db.connectToDatabase()
   .then(function () {
     app.listen(3000);
   })
   .catch(function (error) {
-    console.log("Failed to connect to the database");
+    console.log("Failed to connect to the database!");
     console.log(error);
   });
