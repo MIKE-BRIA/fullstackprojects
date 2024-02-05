@@ -1,5 +1,6 @@
 //importing bcrpt for hashing password
 const bcrypt = require("bcryptjs");
+const mongodb = require("mongodb");
 
 const db = require("../data/database");
 
@@ -14,6 +15,16 @@ class User {
       postalCode: postal,
       city: city,
     };
+  }
+
+  //finding a user by id
+  static findById(userId) {
+    const uid = new mongodb.ObjectId(userId);
+
+    return db
+      .getDb()
+      .collection("users")
+      .findOne({ _id: uid }, { projection: { password: 0 } });
   }
 
   //getting already registered email
