@@ -1,46 +1,43 @@
-//* all the functions that are dealing with handling the cart items
-
 const Product = require("../models/product.model");
 
-//get cart
-function getCart(req, res) {
+async function getCart(req, res) {
   res.render("customer/cart/cart");
 }
 
-//adding cartitem
+//adding the cart items to the cart
 async function addCartItem(req, res, next) {
   let product;
   try {
     product = await Product.findById(req.body.productId);
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    next(error);
     return;
   }
 
   const cart = res.locals.cart;
+
   cart.addItem(product);
-  //updating the session with updated cart items
   req.session.cart = cart;
 
   res.status(201).json({
-    message: "Cart added successfully",
+    message: "Cart updated!",
     newTotalItems: cart.totalQuantity,
   });
 }
 
-//updating the cart items
-function updateCartItem(req, res, next) {
+//upading the cart items to the cart
+function updateCartItem(req, res) {
   const cart = res.locals.cart;
 
-  const updatedItemData = cart.updateCartItem(
+  const updatedItemData = cart.updateItem(
     req.body.productId,
-    req.body.quantity
+    +req.body.quantity
   );
 
   req.session.cart = cart;
 
   res.json({
-    message: "Cart updated successfully updated successfully",
+    message: "Item updated!",
     updatedCartData: {
       newTotalQuantity: cart.totalQuantity,
       newTotalPrice: cart.totalPrice,
