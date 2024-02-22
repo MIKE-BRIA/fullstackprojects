@@ -1,6 +1,7 @@
 const db = require("../data/database");
 const bcrypt = require("bcryptjs");
 
+//!signup post function
 async function signup(req, res, next) {
   //*get user information
 
@@ -44,6 +45,7 @@ async function signup(req, res, next) {
   res.redirect("login");
 }
 
+//!login post function
 async function login(req, res) {
   //*user input
   const userData = req.body;
@@ -69,7 +71,12 @@ async function login(req, res) {
     return res.redirect("login");
   }
 
-  res.redirect("/");
+  //*storing userdata in a session
+  req.session.user = { id: existingUser._id, email: existingUser.email };
+  req.session.isAuth = true;
+  req.session.save(() => {
+    res.redirect("/");
+  });
 }
 
 module.exports = {
