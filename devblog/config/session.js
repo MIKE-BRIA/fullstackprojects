@@ -1,21 +1,20 @@
-const mongodbStore = require("connect-mongodb-session");
 const session = require("express-session");
+const mongodbStore = require("connect-mongodb-session");
 
-//*session store
+//*config session store
 function sessionStore() {
   const MongoDBStore = mongodbStore(session);
 
   const store = new MongoDBStore({
     uri: "mongodb://127.0.0.1:27017",
     databaseName: "blogging",
-    collection: "session",
+    collection: "usersessions",
   });
 
   return store;
 }
 
-//* session configuration
-
+//*session configuration
 function sessionConfig() {
   return {
     secret: "hardpasswords",
@@ -23,9 +22,9 @@ function sessionConfig() {
     saveUninitialized: false,
     store: sessionStore(),
     cookie: {
-      maxAge: 24 * 24 * 60 * 60 * 1000,
-      //   secure: process.env.NODE_ENV === "production", // true in production
-      //   sameSite: "strict",
+      maxAge: 2 * 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production", // true in production
+      sameSite: "strict",
     },
   };
 }
