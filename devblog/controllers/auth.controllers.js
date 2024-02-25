@@ -13,8 +13,25 @@ async function signup(req, res, next) {
 
   const trimpassword = password.trim();
 
-  if (email !== confirmemail || password.length < 6 || !email.includes("@")) {
-    return res.render("/signup");
+  if (
+    email !== confirmemail ||
+    trimpassword.length < 6 ||
+    !email.includes("@")
+  ) {
+    //*having a session data store
+    req.session.inputData = {
+      hasError: true,
+      message: "Invalid input - check input",
+      fullname: fullname,
+      email: email,
+      confirmemail: confirmemail,
+      password: trimpassword,
+    };
+
+    req.session.save(() => {
+      res.redirect("/signup");
+    });
+    return;
   }
 
   //*user exists
@@ -24,7 +41,17 @@ async function signup(req, res, next) {
     .findOne({ email: email });
 
   if (existingUser) {
+    req.session.inputData = {
+      hasError: true,
+      message: "User already exists - please login",
+      fullname: fullname,
+      email: email,
+      confirmemail: confirmemail,
+      password: trimpassword,
+    };
+
     console.log("user already exists");
+
     return res.redirect("/signup");
   }
 
@@ -59,29 +86,60 @@ async function login(req, res) {
     .findOne({ email: email });
 
   if (!existingUser) {
-    console.log("User not found");
-    return res.redirect("/login");
+    req.session.inputData = {
+      hasError: true,
+      message: "User not found - please signup",
+      email: email,
+      password: password,
+    };
+
+    req.session.save(() => {});
+
+    res.redirect("/login");
+    return;
   }
 
   //*compare entered password
   const comparePassword = await bcrypt.compare(password, existingUser.password);
 
   if (!comparePassword) {
-    console.log("You enterd wrong password");
-    return res.redirect("/login");
+    req.session.inputData = {
+      hasError: true,
+      message: "You entered wrong password",
+      email: email,
+      password: password,
+    };
+    console.log("You entered wrong password");
+
+    req.session.save(() => {
+      res.redirect("/login");
+    });
+
+    return;
   }
 
   req.session.user = {
     id: existingUser._id,
     email: existingUser.email,
   };
-  req.session.isAuthenticated = true;
+
+  req.session.isAuth = true;
 
   console.log(req.session);
 
   //writing the session to the database
   req.session.save(() => {
-    res.redirect("/"); //save the session then redirect user to admin page
+    res.redirect("/admin");
+  });
+}
+
+//!logout post function
+function logout(req, res) {
+  req.session.user = null;
+  req.session.isAuth = false;
+
+  req.session.save(() => {
+    res.redirect("/");
   });
 }
 
@@ -90,4 +148,5 @@ async function login(req, res) {
 module.exports = {
   signup: signup,
   login: login,
+  logout: logout,
 };
