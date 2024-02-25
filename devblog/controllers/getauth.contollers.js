@@ -1,15 +1,55 @@
+const db = require("../data/database");
+
 //*get signup page
 function getSignupPage(req, res) {
-  res.render("signup");
+  let sessionInputData = req.session.inputData;
+
+  if (!sessionInputData) {
+    sessionInputData = {
+      hasError: false,
+      fullname: "",
+      email: "",
+      confirmemail: "",
+      password: "",
+    };
+  }
+
+  req.session.inputData = null;
+
+  res.render("signup", { inputData: sessionInputData });
 }
 
 //*get login page
 function getLoginPage(req, res) {
-  res.render("login");
+  let sessionInputData = req.session.inputData;
+
+  if (!sessionInputData) {
+    sessionInputData = {
+      hasError: false,
+      email: "",
+      password: "",
+    };
+  }
+
+  req.session.inputData = null;
+
+  res.render("login", { inputData: sessionInputData });
+}
+
+//*
+function getProfilePage(req, res) {
+  // if (!req.session.isAuth) {
+  //   return res.render("401");
+  // }
+  res.render("profile");
 }
 
 //*get admin page
-function getAdminPage(req, res) {
+async function getAdminPage(req, res) {
+  // if (!req.session.isAuth) {
+  //   return res.render("401");
+  // }
+
   res.render("admin");
 }
 
@@ -23,4 +63,5 @@ module.exports = {
   getLoginPage: getLoginPage,
   getAdminPage: getAdminPage,
   getHomePage: getHomePage,
+  getProfilePage: getProfilePage,
 };
