@@ -5,7 +5,7 @@ const authUtil = require("../util/authentication");
 const validation = require("../util/validation");
 const sessionFlash = require("../util/session-flash");
 
-//function for the signup page get request
+//!function for the signup page get request
 function getSignup(req, res) {
   //repopulate the session
   let sessionData = sessionFlash.getSessionData(req);
@@ -25,7 +25,7 @@ function getSignup(req, res) {
   res.render("customer/auth/signup", { inputData: sessionData });
 }
 
-//function for signup post request
+//!function for signup post request
 async function signup(req, res, next) {
   //entered data
   const enteredData = {
