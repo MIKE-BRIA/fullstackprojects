@@ -4,16 +4,16 @@ const mongodb = require("mongodb");
 //!Quiz class
 class Quiz {
   constructor(text, answer, id) {
+    this.id = id;
     this.text = text;
     this.answer = answer;
-    this.id = id;
   }
 
   static async getAllQuiz() {
     const quizDocuments = await db.getDb().collection("quiz").find().toArray();
 
     return quizDocuments.map((quizDocument) => {
-      return new Quiz(quizDocument._id, quizDocument.text, quizDocument.answer);
+      return new Quiz(quizDocument.text, quizDocument.answer, quizDocument._id);
     });
   }
 
