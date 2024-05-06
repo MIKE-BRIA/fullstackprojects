@@ -1,0 +1,51 @@
+.header {
+  align-items: center;
+  justify-content: center;
+}
+
+.data {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
+.text {
+  height: 7rem;
+}
+
+.btns {
+  margin-top: 2rem;
+  align-items: right;
+}
+
+.btn {
+  font-size: 1.5rem;
+  padding: 0.4rem;
+  margin-right: 2rem;
+  border: none;
+  border-radius: 9px;
+  background-color: rgb(78, 43, 43);
+}
+
+.submit {
+  font-size: 1.5rem;
+  padding: 0.4rem;
+  border: none;
+  border-radius: 10px;
+  background-color: rgb(64, 109, 64);
+}
+
+/* .personal {
+  display: flex;
+  flex-direction: column;
+} */
+
+.personal p {
+  display: flex;
+  flex-direction: column;
+}
+
+.data p {
+  display: flex;
+  flex-direction: column;
+}

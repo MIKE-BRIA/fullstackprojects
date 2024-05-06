@@ -1,0 +1,19 @@
+.navbar {
+  width: 100%;
+  background-color: azure;
+  display: flex;
+  justify-content: space-around;
+  height: 5rem;
+  align-items: center;
+  padding: 2rem;
+}
+
+.list {
+  display: flex;
+  list-style: none;
+  /* justify-content: space-between; */
+}
+
+.list li {
+  margin-right: 2rem;
+}
